@@ -3,9 +3,7 @@ from api import OkayQA
 ok = OkayQA()
 
 def test_get_token():
-    result = ok.get_token()
-    token = result[0]
-    status = result[1]
+    status, token= ok.get_token()
     assert status == 201
     assert token is not None
 
@@ -21,7 +19,6 @@ def test_get_all_bugs():
     assert status == 200
     assert len(bugs) > 0
 
-
 def test_post_create_new_bug():
     title = "Баг"
     description = "Это тестовый баг"
@@ -30,11 +27,11 @@ def test_post_create_new_bug():
     priority = "high"
     fixed = False
     assignee = "Dmitriy"
+
     status, bug = ok.post_create_new_bug(title, description, step, severity, priority, fixed, assignee)
     assert status == 201
     assert bug['title'] == title, 'Неверный Title бага'
     assert bug['description'] == description, "Неверный Description бага"
-
 
 def test_put_update_bug():
     bugs = ok.get_all_bugs()[1]
@@ -46,7 +43,8 @@ def test_put_update_bug():
     priority = "medium"
     fixed = True
     assignee = "Oleg"
+
     status, updated_bug = ok.put_update_bug(last_bug_id, title, description, step, severity, priority, fixed, assignee)
     assert status == 200
     assert updated_bug['title'] == title
-
+    assert updated_bug['description'] == description, "Неверный Description бага"
